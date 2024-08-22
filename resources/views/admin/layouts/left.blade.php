@@ -3,8 +3,8 @@
 
     <!-- App brand starts -->
     <div class="app-brand px-3 py-2 d-flex align-items-center">
-      <a href="index.html">
-        <img src="{{asset('admin-assets/images/logo.svg')}}" class="logo" alt="Bootstrap Gallery" />
+      <a href="{{ route('admin.dashboard') }}">
+        <h2>Blog</h2>
       </a>
     </div>
     <!-- App brand ends -->
@@ -24,29 +24,6 @@
             <span class="menu-text">User Manager</span>
           </a>
         </li>
-        <li>
-          <a href="subscribers.html">
-            <i class="bi bi-check-circle"></i>
-            <span class="menu-text">Order Manager</span>
-          </a>
-        </li>
-        
-        <li class="treeview">
-          <a href="#!">
-            <i class="bi bi-stickies"></i>
-            <span class="menu-text">Product Manager</span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-              <a href="#">Categories</a>
-            </li>
-            <li>
-              <a href="#">Products</a>
-            </li>
-            
-          </ul>
-        </li>
-        
       </ul>
     </div>
     <!-- Sidebar menu ends -->

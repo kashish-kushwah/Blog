@@ -16,13 +16,14 @@ class UserController extends Controller
     public function index()
     {
         // Check if the user is an admin
-        if (Auth::user()->role !== 'admin') {
-            abort(403, 'This action is unauthorized.');
-        }
+        // if (Auth::user()->role !== 'admin') {
+        //     abort(403, 'This action is unauthorized.');
+        // }
 
         // Continue with the user management logic
-        $users = User::all();
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+
+        $users = User::count();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
