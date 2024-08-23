@@ -22,8 +22,9 @@ class UserController extends Controller
 
         // Continue with the user management logic
 
-        $users = User::count();
-        return view('admin.users.index', compact('users'));
+        $users = User::all();
+
+    return view('admin.users.index', compact('users'));
     }
 
     /**
