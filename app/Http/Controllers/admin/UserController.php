@@ -15,16 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Check if the user is an admin
-        // if (Auth::user()->role !== 'admin') {
-        //     abort(403, 'This action is unauthorized.');
-        // }
-
-        // Continue with the user management logic
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
 
         $users = User::all();
-
-    return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -32,6 +29,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
         return view('admin.users.create');
     }
 
@@ -40,25 +42,37 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -66,6 +80,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
         return view('admin.users.edit', compact('user'));
     }
 
@@ -74,16 +93,23 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
         ]);
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
+
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
@@ -92,25 +118,45 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 
-    function changePassword(User $user){
-        return view("admin.user.change-password",['user' => $user]);
+    /**
+     * Show the form for changing the password of the specified user.
+     */
+    public function changePassword(User $user)
+    {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
+        }
+
+        return view('admin.users.change-password', compact('user'));
     }
 
-    function changePasswordStore(Request $request, User $user){
-        ///dd($user);
-        if($request->password == $request->password_confirmation){
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return redirect()->route('admin.users.index')->with('success', 'User password changed successfully.');
-        }  else {
-            return redirect()->route('admin.users.index')->with('error', 'Confirm password not matched');
+    /**
+     * Update the password of the specified user.
+     */
+    public function changePasswordStore(Request $request, User $user)
+    {
+        // Check if the user is authenticated and an admin
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'This action is unauthorized.');
         }
-        
+
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('admin.users.index')->with('success', 'User password changed successfully.');
     }
 }
-
-

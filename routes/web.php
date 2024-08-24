@@ -12,7 +12,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(IsAdmin::class)->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('users/create', [UserController::class, 'create'])->name('admin.users.create');
