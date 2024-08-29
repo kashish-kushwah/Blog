@@ -2,22 +2,27 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
-    protected $policies = [
-        // Your model policies
-    ];
-
-    public function boot()
+    /**
+     * Register any application services.
+     */
+    public function register(): void
     {
-        $this->registerPolicies();  // Ensure this line is correct
+        //
+    }
 
-        // Other gates or policies
-        Gate::define('isAdmin', function ($user) {
-            return $user->is_admin;  // or $user->isAdmin() depending on your implementation
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Gate::define('isAdmin', function(User $user){
+            return $user->role == 'admin';
         });
     }
 }
