@@ -3,7 +3,7 @@
 @section('content')
 <div class="card-header">
     <h4 class="card-title">User Management</h4>
-    <a href="{{ route('admin.user.create') }}" class="btn btn-primary mb-2 mt-2">Add User</a>
+    <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-2 mt-2">Add User</a>
 </div>
 <div class="card-body">
     <div class="border border-dark rounded-3">
@@ -22,14 +22,14 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-info btn-sm"><i class="bi bi-pencil"></i></a>
-                    <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-info btn-sm"><i class="bi bi-pencil"></i></a>
+                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-icon btn-sm mb-1"><i class="bi bi-trash"></i></button>
                         
                     </form>
-                    <a href="{{ route('admin.user.change-password', $user->id) }}" class="btn btn-warning btn btn-info btn-sm">Change Password</a>
+                    {{-- <a href="{{ route('admin.users.change-password', $user->id) }}" class="btn btn-warning btn btn-info btn-sm">Change Password</a> --}}
                 </td>
             </tr>
             
