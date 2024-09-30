@@ -14,10 +14,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        session(['blog_clicked' => true]);
-    $hideSection = session('blog_clicked', false);
-     $items = Post::where('user_id', auth()->user()->id)->paginate(10)->onEachSide(2);
-     return view("post.index", compact('hideSection', 'items'));
+        $userId = Auth::id(); // Get the authenticated user's ID
+        $items = Post::where('user_id', $userId)->paginate(10)->onEachSide(2);
+        return view("post.index", ['items' => $items]);
     }
 
     /**
@@ -108,11 +107,15 @@ return view('post.update', ['post' => $post]);
         
     }
 
-    function isOwner(Post $post){
-        if(auth()->user()->id == $post->user_id){
+    function isOwner(Post $post)
+    {
+        $user = Auth::user(); // Using the Auth facade
+    
+        // Check if the user is authenticated
+        if ($user && $user->id === $post->user_id) {
             return true;
-        } else {
-            return false;
         }
-    }   
+    
+        return false; // Return false if not the owner or not authenticated
+    }
 }
